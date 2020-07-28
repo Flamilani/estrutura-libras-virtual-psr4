@@ -1,0 +1,45 @@
+body {
+    background-color: #e9ecef;
+}
+
+.form-sign {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.card img.icone {
+    width: auto;
+    max-width: 200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+#panel {
+    display: none;
+}
+
+.margin-btn {
+    margin-top: 30px;
+}
+
+.all-scroll {
+    cursor: all-scroll;
+}
+
+.all-scroll:hover {
+    background-color: #095da1 !important;
+    color: #FFF !important;
+}
+
+#loading {
+    display: none;
+}
