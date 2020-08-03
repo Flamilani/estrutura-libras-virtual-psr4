@@ -49,6 +49,68 @@ class CursosController extends Controller {
         $this->loadTemplate('cursos', $dados);
 	}
 
+	public function update_ordem_modulo() {
+
+		// Usuário ordena curso
+		$dados = array(
+			'curso' => array(),
+			'modulos' => array()
+		);			
+
+		if(isset($_POST['id_modulo']) && !empty($_POST['id_modulo'])) {				
+			$array_ordem = $_POST['id_modulo'];
+			$id_curso = $_POST['id_curso'];
+			
+			var_dump("entrou post: " . $id_curso);
+			$cont_ordem = 1;
+			foreach($array_ordem as $id_modulo) {
+				$modulos = new Modulos();			
+				$modulos->updateModuloPorOrdem($id_modulo, $id_curso, $cont_ordem);	
+				$cont_ordem++;	
+				var_dump("entrou foreach: " . $id_curso);
+			}		
+			header("Location: ". BASE . "admin/cursos/ordenar_modulo/" . $id_curso);
+		}
+		$modulos = new Modulos();		
+		$dados['modulos'] = $modulos->getModulosPorOrdem($id_curso);
+
+		$cursos = new Cursos();
+		$dados['curso'] = $cursos->getCurso($id_curso);
+        
+        $this->loadTemplate('modulo_ordenar', $dados);
+	}
+
+	public function add_aula() {
+
+		$dados = array(
+			'curso' => array(),
+			'aula' => array()
+		);			
+		
+		if(isset($_POST['aula']) && !empty($_POST['aula'])) {
+			$aula = addslashes($_POST['aula']);
+			$moduloaula = addslashes($_POST['moduloaula']);
+			$tipo = addslashes($_POST['tipo']);
+			$id = addslashes($_POST['id']);
+
+			$aulas = new Aulas();
+			$aulas->addAula($id, $moduloaula, $aula, $tipo);
+			
+			$_SESSION['alerta_add_aula'] = 
+			'<div class="text-center alert alert-success" role="alert">
+			Aula inserida com sucesso! <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span></button></div>';
+		}	
+
+		$aulas = new Aulas();		
+		$dados['aula'] = $aulas->getAula($id_curso);
+
+		$cursos = new Cursos();
+		$dados['curso'] = $cursos->getCurso($id_curso);
+        
+        $this->loadTemplate('aulas', $dados);
+	}
+
 	public function update_ordem_aula() {
 
 		// Usuário ordena curso
@@ -60,22 +122,21 @@ class CursosController extends Controller {
 		if(isset($_POST['id_aula']) && !empty($_POST['id_aula'])) {				
 			$array_ordem = $_POST['id_aula'];
 			$id_modulo = $_POST['id_modulo'];
+			$id_curso = $_POST['id_curso'];
 			$cont_ordem = 1;
 			foreach($array_ordem as $id_aula) {
 				$aulas = new Aulas();			
 				$aulas->updateAulaPorOrdem($id_aula, $id_modulo, $cont_ordem);	
 				$cont_ordem++;
-			}
-			exit;
-			$id = $_POST['id_curso'];
-			header("Location: ". BASE . "admin/cursos/aulas/" . $id);
+			}	
+			header("Location: ". BASE . "admin/cursos/aulas/" . $id_curso);
 		}
-		$id = $_POST['id_curso'];
+
 		$aulas = new Aulas();		
-		$dados['aula'] = $aulas->getAula($id);
+		$dados['aula'] = $aulas->getAula($id_curso);
 
 		$cursos = new Cursos();
-		$dados['curso'] = $cursos->getCurso($id);
+		$dados['curso'] = $cursos->getCurso($id_curso);
         
         $this->loadTemplate('aulas', $dados);
 	}
@@ -212,6 +273,12 @@ class CursosController extends Controller {
 		if(isset($_POST['modulo']) && !empty($_POST['modulo'])) {
 			$modulo = addslashes($_POST['modulo']);
 			$modulos->addModulo($modulo, $id);
+
+			$_SESSION['alerta_add_modulo'] = 
+			'<div class="text-center alert alert-success" role="alert">
+			Módulo inserido com sucesso! <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span></button></div>';
+
 		}
 
 		// Usuário adicionou uma aula nova
@@ -222,6 +289,11 @@ class CursosController extends Controller {
 
 			$aulas = new Aulas();
 			$aulas->addAula($id, $moduloaula, $aula, $tipo);
+			
+			$_SESSION['alerta_add_aula'] = 
+			'<div class="text-center alert alert-success" role="alert">
+			Aula inserida com sucesso! <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span></button></div>';
 		}
 
 		if(isset($_POST['id_aula']) && !empty($_POST['id_aula'])) {				
@@ -233,11 +305,6 @@ class CursosController extends Controller {
 				$aulas->updateAulaPorOrdem($id_aula, $id_modulo, $cont_ordem);	
 				$cont_ordem++;
 			}
-
-			$_SESSION['alerta_add_aula'] = 
-			'<div class="text-center alert alert-success" role="alert">
-			Aula inserida com sucesso! <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span></button></div>';
 
 			header("Location: ".BASE."admin/cursos/aulas/".$id);
 			exit;
@@ -270,6 +337,34 @@ class CursosController extends Controller {
 		}
 
 		header("Location: " . BASE . 'admin');
+	}
+
+	public function ordenar_modulo($id) {
+		$dados = array(
+			'curso' => array(),
+			'modulos' => array()
+		);
+
+		$cursos = new Cursos();
+		$dados['curso'] = $cursos->getCurso($id);
+
+		$modulos = new Modulos();
+		$dados['modulos'] = $modulos->getModulos($id);
+
+		$this->loadTemplate('modulo_ordenar', $dados);
+	}
+
+	public function ordenar_aula($id) {
+		$dados = array(
+			'modulos' => array()
+		);
+
+		$modulos = new Modulos();
+		$dados['modulos'] = $modulos->getModulosPorAula($id);
+
+		$this->loadTemplate('aula_ordenar', $dados);
+
+
 	}
 
 	public function editar_modulo($id) {
@@ -389,31 +484,15 @@ class CursosController extends Controller {
 			$imagem = $_FILES['imagem'];
 			$pdf = $_FILES['pdf'];
 			$video = addslashes($_POST['url_video']);
+			$video_mp4 = $_FILES['video_mp4'];
+			$imagem_gif = $_FILES['gif'];
+			$gif = $_FILES['gif'];
 
 			$aulas = new Aulas();
-			$aulas->updateAula($id, $nome, $midia, $atividade);
-			
-				if(!empty($imagem['tmp_name']) && $midia == 'imagem') {
-
-				$md5name = md5(time().rand(0,9999)).'.jpg';
-				$types = array('image/jpeg', 'image/jpg', 'image/png');
+			$aulas->updateAula($id, $nome, $midia, $atividade);			
 		
-				if(in_array($imagem['type'], $types)) {
 
-					$path = "../assets/uploads/images/";
-					
-					if(!is_dir($path)) {
-						mkdir($path, 0755, true);
-					}
-					move_uploaded_file($imagem['tmp_name'], $path . $md5name);
-
-					$aulas = new Aulas();
-					$aulas->updateImagemAula($id, $md5name);
-					var_dump($aulas);
-					}
-			}			
-
-			if(!empty($_POST['url_video']) && $midia == 'video') {
+			if(!empty($_POST['url_video']) && $midia == 'video_youtube') {
 			
 			$urlCurta = "https://youtu.be/";
 			$parte = substr($video, 0, 17);		
@@ -422,6 +501,96 @@ class CursosController extends Controller {
 				$aulas = new Aulas();
 				$aulas->updateVideoDeAula($id, $novaUrl);
 			}	
+
+			if(!empty($_POST['url_vimeo']) && $midia == 'video_vimeo') {
+			
+				$urlCurta = "https://vimeo.com/";
+				$parte = substr($video, 0, 17);		
+					$novaUrl = str_replace($urlCurta, 'https://player.vimeo.com/video/', $video);
+	
+					$aulas = new Aulas();
+					$aulas->updateVimeoAula($id, $novaUrl);
+				}	
+
+				if(!empty($video_mp4['tmp_name']) && $midia == 'video_mp4') {
+
+					$md5name = md5(time().rand(0,9999)).'.mp4';
+					$types = array('video/mp4');
+			
+					if(in_array($video_mp4['type'], $types)) {
+	
+						$path = "../assets/uploads/videos/";
+						
+						if(!is_dir($path)) {
+							mkdir($path, 0755, true);
+						}
+						move_uploaded_file($video_mp4['tmp_name'], $path . $md5name);
+	
+						$aulas = new Aulas();
+						$aulas->updateVideoMp4Aula($id, $md5name);
+	
+						}
+				}	
+
+				if(!empty($imagem['tmp_name']) && $midia == 'imagem') {
+
+					$md5name = md5(time().rand(0,9999)).'.jpg';
+					$types = array('image/jpeg', 'image/jpg', 'image/png');
+			
+					if(in_array($imagem['type'], $types)) {
+	
+						$path = "../assets/uploads/images/";
+						
+						if(!is_dir($path)) {
+							mkdir($path, 0755, true);
+						}
+						move_uploaded_file($imagem['tmp_name'], $path . $md5name);
+	
+						$aulas = new Aulas();
+						$aulas->updateImagemAula($id, $md5name);
+	
+						}
+				}
+
+				if(!empty($imagem_gif['tmp_name']) && $midia == 'gif') {
+
+					$md5name = md5(time().rand(0,9999)).'.png';
+					$types = array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
+			
+					if(in_array($imagem_gif['type'], $types)) {
+	
+						$path = "../assets/uploads/gifs/";
+						
+						if(!is_dir($path)) {
+							mkdir($path, 0755, true);
+						}
+						move_uploaded_file($imagem_gif['tmp_name'], $path . $md5name);
+	
+						$aulas = new Aulas();
+						$aulas->updateImagemGifAula($id, $md5name);
+	
+						}
+				}
+				
+				if(!empty($gif['tmp_name']) && $midia == 'gif') {
+
+					$md5name = md5(time().rand(0,9999)).'.gif';
+					$types = array('image/gif');
+			
+					if(in_array($gif['type'], $types)) {
+	
+						$path = "../assets/uploads/gifs/";
+						
+						if(!is_dir($path)) {
+							mkdir($path, 0755, true);
+						}
+						move_uploaded_file($gif['tmp_name'], $path . $md5name);
+	
+						$aulas = new Aulas();
+						$aulas->updateGifAula($id, $md5name);
+	
+						}
+				}	
 			
 			if(!empty($pdf['tmp_name']) && $midia == 'arquivo') {
 

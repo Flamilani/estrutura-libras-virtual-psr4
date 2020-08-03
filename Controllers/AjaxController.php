@@ -17,6 +17,8 @@ class AjaxController extends Controller {
 	public function marcar_assistido($id) {
 		$aulas = new Aulas();
 		$aulas->marcarAssistido($id);
+
+		header("Location: " . BASE . "cursos/aula/" . $id);
 	}
 
 }

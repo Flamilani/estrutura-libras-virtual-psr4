@@ -26,3 +26,18 @@ $(function() {
 $(function() {
     $('[data-toggle="tooltip"]').tooltip()
 });
+
+$(document).ready(function() {
+    $('.gifplayer').gifplayer();
+});
+
+function marcarAssistido(obj) {
+    var id = $(obj).attr('data-id');
+
+    $(obj).remove();
+
+    $.ajax({
+        url: '/estrutura_ead_psr4/ajax/marcar_assistido/' + id,
+        type: 'GET'
+    });
+}

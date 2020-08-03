@@ -2,18 +2,52 @@
 <?php require 'inc/aside.php'; ?>  
   <div class="col-sm-8">
   <h3> <?php echo $aula_info['atividade'] == '1' ? '<b class="text-primary">Atividade</b>' : ''; ?> <?php echo $aula_info['nome_aula']; ?></h3>
-  <?php if(!empty($aula_info['url_video'] && $aula_info['midia'] == 'video')): ?> 
+  
+  <?php if(!empty($aula_info['url_video'] && $aula_info['midia'] == 'video_youtube')): ?> 
   <div class="embed-responsive embed-responsive-16by9">
-   <iframe class="embed-responsive-item" src="<?php echo $parte_aula['url_video']; ?>" frameborder="0" allowfullscreen></iframe>
+   <iframe class="embed-responsive-item" src="<?php echo $aula_info['url_video']; ?>" frameborder="0" allowfullscreen></iframe>
    </div>
    <?php endif; ?>
+
+   <?php if(!empty($aula_info['url_video'] && $aula_info['midia'] == 'video_vimeo')): ?> 
+  <div class="embed-responsive embed-responsive-16by9">
+   <iframe class="embed-responsive-item" src="<?php echo $aula_info['url_vimeo']; ?>" frameborder="0" allowfullscreen></iframe>
+   </div>
+   <?php endif; ?>
+
+   <?php if(!empty($aula_info['video_mp4'] && $aula_info['midia'] == 'video_mp4')): ?> 
+  <div class="embed-responsive embed-responsive-16by9">
+  <video class="embed-responsive-item" controls>
+  <source src="<?php echo BASE .'assets/uploads/videos/'. $aula_info['video_mp4']; ?>" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+Your browser does not support the video tag.
+</video>
+   </div>
+   <?php endif; ?>
+
     <?php if(!empty($aula_info['arquivo'] && $aula_info['midia'] == 'arquivo')): ?> 
-    <iframe src="<?php echo BASE .'assets/uploads/pdfs'. $aula_info['arquivo']; ?>" style="width:100%; height:700px;" class="mt-3" frameborder="0"></iframe>
-    <?php endif; ?>
-    <?php if(!empty($aula_info['imagem'] && $aula_info['midia'] == 'imagem')): ?> 
-    <img class="img-fluid mt-3" src="<?php echo BASE .'assets/uploads/images'. $aula_info['imagem']; ?>" />
+    <iframe src="<?php echo BASE .'assets/uploads/pdfs/'. $aula_info['arquivo']; ?>" style="width:100%; height:700px;" class="mt-3" frameborder="0"></iframe>
     <?php endif; ?>
 
+    <?php if(!empty($aula_info['imagem'] && $aula_info['midia'] == 'imagem')): ?> 
+    <img class="img-fluid mt-3" src="<?php echo BASE .'assets/uploads/images/'. $aula_info['imagem']; ?>" />
+    <?php endif; ?>
+
+    <?php if(!empty($aula_info['gif'] && $aula_info['midia'] == 'gif')): ?> 
+      <img class="gifplayer img-gif" src="<?php echo BASE .'assets/uploads/gifs/'. $aula_info['imagem_gif']; ?>" data-gif="<?php echo BASE .'assets/uploads/gifs/'. $aula_info['gif']; ?>" />
+    <?php endif; ?>
+    <?php if($aula_info['assistido'] == '1'): ?>
+		<h4><span class="badge badge-success mt-2">Aula concluída</span></h4>
+	<?php else: ?>
+		<button class="btn btn-outline-success mt-3 d-flex justify-content-center" onclick="marcarAssistido(this)" 
+		data-id="<?php echo $aula_info['id']; ?>">Marcar como assistido</button>
+  <?php endif; ?>
+  <h5 class="mt-3">Caso tiver dúvida, pode enviar sua pergunta aqui.</h5>
+	<form method="POST" class="form_duvida">
+		<textarea class="form-control" name="duvida"></textarea>
+
+		<input class="btn btn-primary mt-3" type="submit" value="Enviar Dúvida" />
+	</form>
     <?php if($aula_info['atividade'] == 1): ?> 
     <?php if (isset($_SESSION['alerta_atividade_salva']) && !empty($_SESSION['alerta_atividade_salva'])) {
   echo $_SESSION['alerta_atividade_salva'];

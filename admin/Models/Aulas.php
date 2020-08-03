@@ -5,6 +5,7 @@ use \Core\Model;
 class Aulas extends Model {
 
 	public function getAulasDoModulo($id) {
+		
 		$array = array();
 
 		$sql = "SELECT * FROM aulas WHERE id_modulo = '$id' ORDER BY ordem";
@@ -34,6 +35,33 @@ class Aulas extends Model {
 
 		return $array;
 	}
+
+	public function verificarAulaPorModulo($id_modulo) {
+		$sql = "SELECT * FROM aulas WHERE id_modulo = '$id_modulo'";
+		$sql = $this->db->query($sql);
+	
+		if($sql->rowCount() > 0) {
+		  return true;
+		} else {
+		  return false;
+		}
+	  }
+
+	  public function setAulaModulo($id_modulo) {
+  
+		$sql = "SELECT * FROM aulas WHERE id_modulo = '$id_modulo'";
+		$sql = $this->db->query($sql);
+	
+		if($sql->rowCount() > 0) {
+		  $this->info = $sql->fetch();
+		}
+	
+	  }
+	
+	  public function getAulaModulo() {
+		return $this->info['id'];
+	  }
+	
 
 	public function deleteAula($id) {
 		$sql = "SELECT id_curso FROM aulas WHERE id = '$id'";
@@ -205,6 +233,30 @@ class Aulas extends Model {
 
 	public function updateVideoDeAula($id, $url_video) {
 		$this->db->query("UPDATE aulas SET url_video = '$url_video' WHERE id = '$id'");
+
+		return $this->getAulaCurso($id);
+	}
+	
+	public function updateVimeoAula($id, $url_vimeo) {
+		$this->db->query("UPDATE aulas SET url_video = '$url_vimeo' WHERE id = '$id'");
+
+		return $this->getAulaCurso($id);
+	}
+
+	public function updateVideoMp4Aula($id, $video_mp4) {
+		$this->db->query("UPDATE aulas SET video_mp4 = '$video_mp4' WHERE id = '$id'");
+
+		return $this->getAulaCurso($id);
+	}
+
+	public function updateGifAula($id, $gif) {
+		$this->db->query("UPDATE aulas SET gif = '$gif' WHERE id = '$id'");
+
+		return $this->getAulaCurso($id);
+	}
+
+	public function updateImagemGifAula($id, $imagem_gif) {
+		$this->db->query("UPDATE aulas SET imagem_gif = '$imagem_gif' WHERE id = '$id'");
 
 		return $this->getAulaCurso($id);
 	}

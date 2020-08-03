@@ -8,7 +8,7 @@ class Modulos extends Model {
 	public function getModulos($id_curso) {
 		$array = array();
 
-		$sql = "SELECT * FROM modulos WHERE id_curso = '$id_curso'";
+		$sql = "SELECT * FROM modulos WHERE id_curso = '$id_curso' ORDER BY ordem";
 		$sql = $this->db->query($sql);
 
 		if($sql->rowCount() > 0) {
@@ -29,7 +29,7 @@ class Modulos extends Model {
 	public function getModuloPorAula($id) {
 		$array = array();
 
-		$sql = "SELECT * FROM modulos WHERE id = '$id'";
+		$sql = "SELECT * FROM modulos WHERE id = '$id' ORDER BY ordem";
 		$sql = $this->db->query($sql);
 
 		if($sql->rowCount() > 0) {

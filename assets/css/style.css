@@ -54,3 +54,17 @@ footer {
 .zindex {
     z-index: 999;
 }
+
+.img-gif {
+    max-width: 100%;
+    height: auto;
+}
+
+ins.play-gif {
+    line-height: 45px;
+}
+
+.progress {
+    background-color: #dae0e5;
+    height: 22px;
+}

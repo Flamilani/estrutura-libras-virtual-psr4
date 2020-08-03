@@ -43,3 +43,17 @@ body {
 #loading {
     display: none;
 }
+
+video {
+    width: 100%;
+    height: auto;
+}
+
+.img-gif {
+    max-width: 100%;
+    height: auto;
+}
+
+ins.play-gif {
+    line-height: 45px;
+}

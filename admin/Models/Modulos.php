@@ -8,7 +8,28 @@ class Modulos extends Model {
 	public function getModulos($id_curso) {
 		$array = array();
 
-		$sql = "SELECT * FROM modulos WHERE id_curso = '$id_curso'";
+		$sql = "SELECT * FROM modulos WHERE id_curso = '$id_curso' ORDER BY ordem";
+		$sql = $this->db->query($sql);
+
+		if($sql->rowCount() > 0) {
+
+			$array = $sql->fetchAll();
+
+			$aulas = new Aulas();
+
+			foreach($array as $mChave => $mDados) {
+				$array[$mChave]['aulas'] = $aulas->getAulasDoModulo($mDados['id']);
+			}
+
+		}
+
+		return $array;
+	}
+
+	public function getModulosPorAula($id) {
+		$array = array();
+
+		$sql = "SELECT * FROM modulos WHERE id = '$id' ORDER BY ordem";
 		$sql = $this->db->query($sql);
 
 		if($sql->rowCount() > 0) {
@@ -29,7 +50,7 @@ class Modulos extends Model {
 	public function getModulo($id) {
 		$array = array();
 
-		$sql = "SELECT * FROM modulos WHERE id = '$id'";
+		$sql = "SELECT * FROM modulos WHERE id = '$id' ORDER BY ordem";
 		$sql = $this->db->query($sql);
 
 		if($sql->rowCount() > 0) {
@@ -39,12 +60,40 @@ class Modulos extends Model {
 		return $array;
 	}
 
+	public function getModulosPorOrdem($id_curso) {
+		$array = array();
+
+		$sql = "SELECT * FROM modulos WHERE id_curso = '$id_curso' ORDER BY ordem";
+		$sql = $this->db->query($sql);
+
+		if($sql->rowCount() > 0) {
+			$array = $sql->fetchAll();
+			}
+
+		return $array;
+	}
+
+	public function updateModuloPorOrdem($id, $id_curso, $ordem) {
+		$this->db->query("UPDATE modulos SET id_curso = '$id_curso', ordem = '$ordem' WHERE id = '$id'");
+
+		return $this->getModulosPorOrdem($id);
+	}
+
+
 	public function addModulo($nome, $id_curso) {
-		$this->db->query("INSERT INTO modulos SET nome = '$nome', id_curso = '$id_curso'");
+		$sql = "SELECT ordem FROM modulos WHERE id_curso = '$id_curso' ORDER BY ordem DESC LIMIT 1";
+		$sql = $this->db->query($sql);
+		$ordem = 1;
+		if($sql->rowCount() > 0) {
+			$sql = $sql->fetch();
+			$ordem = intval($sql['ordem']);
+			$ordem++;
+		}
+		$this->db->query("INSERT INTO modulos SET nome = '$nome', ordem = '$ordem', id_curso = '$id_curso'");
 
 	}
 
-	public function deleteModulos($id) {
+	public function deleteModulo($id) {
 		$sql = "SELECT id_curso FROM modulos WHERE id = '$id'";
 		$sql = $this->db->query($sql);
 		if($sql->rowCount() > 0) {

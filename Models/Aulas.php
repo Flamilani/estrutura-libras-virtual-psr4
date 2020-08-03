@@ -46,7 +46,7 @@ class Aulas extends Model {
 
 	public function getCursoDeAula($id_aula) {
 
-		$sql = "SELECT id_curso FROM aulas WHERE id = '$id_aula'";
+		$sql = "SELECT id_curso FROM aulas WHERE id = '$id_aula' ORDER BY ordem";
 		$sql = $this->db->query($sql);
 
 		if($sql->rowCount() > 0) {

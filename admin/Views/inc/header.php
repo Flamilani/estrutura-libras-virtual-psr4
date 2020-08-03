@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="<?= BASE; ?>assets/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="<?= BASE; ?>assets/css/admin.css" />
     <link rel="stylesheet" href="<?= BASE; ?>assets/css/floating-labels.css" />
+    <link rel="stylesheet" href="<?= BASE; ?>assets/gifplayer/dist/gifplayer.css" />
     <script src="<?= BASE; ?>assets/js/jquery-3.5.0.min.js"></script>
     <script src="<?= BASE; ?>assets/js/jquery-ui.min.js"></script>
 </head>
