@@ -80,6 +80,28 @@ class CursosController extends Controller {
         $this->loadTemplate('modulo_ordenar', $dados);
 	}
 
+	
+	public function select_modulo() {
+
+		$dados = array(
+			'curso' => array(),
+			'modulo' => array()
+		);			
+		
+		if(isset($_POST['id_modulo']) && !empty($_POST['id_modulo'])) {
+			$id_modulo = addslashes($_POST['id_modulo']);
+			$id_curso = addslashes($_POST['id_curso']);
+			var_dump("select_modulo: " . $id_modulo);
+
+			$modulos = new Modulos();
+			$modulos->getModulo($id_modulo);	
+			
+		//	header("Location: ". BASE . "admin/cursos/aulas/" . $id_curso);
+		}	
+        
+        $this->loadTemplate('aulas', $dados);
+	}
+
 	public function add_aula() {
 
 		$dados = array(
@@ -91,10 +113,10 @@ class CursosController extends Controller {
 			$aula = addslashes($_POST['aula']);
 			$moduloaula = addslashes($_POST['moduloaula']);
 			$tipo = addslashes($_POST['tipo']);
-			$id = addslashes($_POST['id']);
+			$id_curso = addslashes($_POST['id_curso']);
 
 			$aulas = new Aulas();
-			$aulas->addAula($id, $moduloaula, $aula, $tipo);
+			$aulas->addAula($id_curso, $moduloaula, $aula, $tipo);
 			
 			$_SESSION['alerta_add_aula'] = 
 			'<div class="text-center alert alert-success" role="alert">
@@ -294,7 +316,7 @@ class CursosController extends Controller {
 			'<div class="text-center alert alert-success" role="alert">
 			Aula inserida com sucesso! <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span></button></div>';
-		}
+		} 
 
 		if(isset($_POST['id_aula']) && !empty($_POST['id_aula'])) {				
 			$array_ordem = $_POST['id_aula'];

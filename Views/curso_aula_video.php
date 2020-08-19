@@ -5,10 +5,13 @@
 	<iframe id="video" style="width:100%" frameborder="0" src="<?php echo $aula_info['url_video']; ?>"></iframe><br/>
 	<?php echo $aula_info['descricao']; ?><br />
 	<?php if($aula_info['assistido'] == '1'): ?>
-		Esta aula já foi assistida!
+      <button class="btn btn-success mt-3" disabled>Aula concluída</button>
 	<?php else: ?>
-		<button class="btn btn-outline-success mt-3 text-center" onclick="marcarAssistido(this)" data-id="<?php echo $aula_info['id_aula']; ?>">Marcar como assistido</button>
-	<?php endif; ?>
+		<button class="btn btn-outline-success mt-3" onclick="marcarAssistido(this)" 
+		data-id="<?php echo $aula_info['id']; ?>">Marcar como assistido</button>
+  <?php endif; ?>
+  <button id="load_marcar_concluido" type="button" class="btn btn-info mt-3" disabled><i class="fa fa-refresh fa-spin fa-fw"></i> 
+  Marcando... </button>
 	<hr/>
 	<h4>Dúvidas? Envie sua pergunta!</h4>
 	<form method="POST" class="form_duvida">

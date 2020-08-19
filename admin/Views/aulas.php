@@ -62,7 +62,7 @@
         <input type="submit" class="btn btn-primary margin-btn" id="btn-aula" value="Adicionar Aula" />
     </div>
   </div>
-  </form>  
+  </form>   
   <?php endif; ?>
  <div id="loading" class="alert alert-info text-center" role="alert">
 <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i> 
@@ -74,20 +74,23 @@
 	<ul class="list-group mb-3">
   <li class="list-group-item active">
   <?php echo $modulo['nome']; ?> 
-  <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">
-  <i class="fa fa-plus-circle" aria-hidden="true"></i>
-</button>
+
   <a data-toggle="tooltip" title="Deletar Módulo" onclick="return confirmDelete()" class="btn btn-danger pull-right"
   href="<?php echo BASE; ?>admin/cursos/deletar_modulo/<?php echo $modulo['id']; ?>">
   <i class="fa fa-trash" aria-hidden="true"></i></a>
   <a data-toggle="tooltip" title="Editar Módulo" class="btn btn-secondary pull-right mr-3" href="<?php echo BASE; ?>admin/cursos/editar_modulo/<?php echo $modulo['id']; ?>">
   <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-  <?php if(isset($modulo['aulas']) && !empty($modulo['aulas'])): ?>
-    <a data-toggle="tooltip" title="Ordenar Aulas" class="btn btn-info pull-right mr-3" href="<?php echo BASE; ?>admin/cursos/ordenar_aula/<?php echo $modulo['id']; ?>">
-  <i class="fa fa-arrows" aria-hidden="true"></i></a>
+  </li>
+  <li class="list-group-item list-group-item-primary">
+<!--   <button data-curso="<?php echo $modulo['id_curso']; ?>" data-modulo="<?php echo $modulo['id']; ?>" data-nome="<?php echo $modulo['nome']; ?>" type="button" 
+  class="btn btn-info view_modulo" data-toggle="modal" data-target=".bd-example-modal-lg">
+  <i class="fa fa-plus-circle" aria-hidden="true"></i> Adicionar Nova Aula
+</button> -->
+<?php if(isset($modulo['aulas']) && !empty($modulo['aulas'])): ?>
+    <a class="btn btn-info" href="<?php echo BASE; ?>admin/cursos/ordenar_aula/<?php echo $modulo['id']; ?>">
+  <i class="fa fa-arrows" aria-hidden="true"></i> Ordenar Aulas </a>
   <?php endif; ?>
   </li>
-
   <?php foreach($modulo['aulas'] as $aula): ?>
   <li class="list-group-item list-group-item-primary">
   <?php if($aula['tipo'] == 'aula'): ?>
@@ -117,17 +120,19 @@
 
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">
+       Adicionar Aula em <div id="nome_modulo"></div>
+       </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
       <form method="POST" autocomplete="off">
-<div data-modulo="<?php echo $modulo['id']; ?>">
+    <div id="id_mdoulo"></div>
     <div class="form-group">
     <label for="aula">Aula</label>
     <input type="text" class="form-control" name="aula" id="aula" placeholder="Tema de Aula" required='required'>
@@ -142,14 +147,14 @@
     </select>
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-primary margin-btn" id="btn-aula" value="Adicionar Aula" />
+        <input type="submit" class="btn btn-primary adicionar_aula" id="btn-aula" value="Adicionar Aula" />
     </div>
   </div>
   </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Adicionar Aula</button>
       </div>
     </div>
   </div>
@@ -168,23 +173,55 @@ $(document).ready(function() {
         $('#modulo').prop('disabled', $(this).val().length > 0);
         $('#btn-modulo').prop('disabled', $(this).val().length > 0);
     });
+    
+$(document).on('click', '.view_modulo', function() {  
+            var id_modulo = $(this).attr('data-modulo');
+            var id_curso = $(this).attr('data-curso');
+            var nome = $(this).attr('data-nome');
+            alert(id_mdoulo, id_curso, nome);
+            $.ajax({
+                type: "POST",
+                url: "<?php echo BASE; ?>admin/cursos/select_modulo",
+                data: {
+                  id_modulo: id_modulo,
+                  id_curso: id_curso,
+                  nome: nome
+                },
+                success: function (data) {
+                    console.log(id_modulo);
+                    console.log(nome);
+                    console.log(id_curso);
+                    alert(id_mdoulo, id_curso, nome);
+                    alert(data);
+                    $('#id_modulo').html(data.id_modulo);
+                    $('#id_curso').html(data.id_curso);
+                    $('#nome_modulo').html(data.nome);
+                }});
+        
+    });
 
-    $(document).on('click', '.adicionar_aula', function() {
+    $('#btn-aula').on('click', function() {
             var current_element = $(this);
-            var id_modulo = $(current_element).attr('data-modulo');
-            var name = $("#name").val();
-                $('input[value="classname"]').val;
-            var email = $("#email").val();
+            var moduloaula = $(current_element).attr('data-modulo');
+            var id_curso = $(current_element).attr('data-curso');
+            var aula = $('#aula').val();
+            var tipo = $('#tipo').val();
+            console.log(aula);
+            console.log(tipo);
             $.ajax({
                 type: "POST",
                 url: "<?php echo BASE; ?>admin/cursos/add_aula",
                 data: {
-                  id_aula: ordem, 
-                  id_modulo: id_modulo,
+                  aula: aula, 
+                  moduloaula: moduloaula,
+                  tipo: tipo,
                   id_curso: id_curso
                 },
                 success: function (data) {
-                    location.reload();
+                    console.log(data.aula);
+                    console.log(data.moduloaula);
+                    console.log(tipo);
+                 //   location.reload();
                 }});
         
     });

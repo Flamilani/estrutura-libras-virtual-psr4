@@ -24,6 +24,14 @@ class Controller {
 		require 'Views/'.$viewName.'.php';
 	}
 
+	// HELPERS
+
+	public function getLastUrl() {
+		$url = explode("/", $_SERVER["PHP_SELF"]); 
+		$last = end($url); 
+		return $last;
+	}
+
 	public function zeroPad($string) {
 		$str = str_pad($string, 4, '0', STR_PAD_LEFT);
 		return $str;

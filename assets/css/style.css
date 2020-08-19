@@ -68,3 +68,15 @@ ins.play-gif {
     background-color: #dae0e5;
     height: 22px;
 }
+
+#load_marcar_concluido {
+    display: none;
+}
+
+.list-group-item-action {
+    display: none;
+}
+
+.item-active {
+    background-color: #b8daff !important;
+}

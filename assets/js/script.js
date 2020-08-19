@@ -14,7 +14,7 @@ function confirmDelete() {
 $(document).ready(function() {
     $("#flip").click(function() {
         $("#panel").slideToggle("fast");
-    });
+    }); 
 });
 
 $(function() {
@@ -36,8 +36,13 @@ function marcarAssistido(obj) {
 
     $(obj).remove();
 
+    $("#load_marcar_concluido").show();
+
     $.ajax({
         url: '/estrutura_ead_psr4/ajax/marcar_assistido/' + id,
-        type: 'GET'
-    });
+        type: 'GET',
+        success: function() {        
+            location.reload();
+          }   
+    });    
 }

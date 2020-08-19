@@ -37,11 +37,13 @@ Your browser does not support the video tag.
       <img class="gifplayer img-gif" src="<?php echo BASE .'assets/uploads/gifs/'. $aula_info['imagem_gif']; ?>" data-gif="<?php echo BASE .'assets/uploads/gifs/'. $aula_info['gif']; ?>" />
     <?php endif; ?>
     <?php if($aula_info['assistido'] == '1'): ?>
-		<h4><span class="badge badge-success mt-2">Aula concluída</span></h4>
+      <button class="btn btn-success mt-3" disabled>Aula concluída</button>
 	<?php else: ?>
-		<button class="btn btn-outline-success mt-3 d-flex justify-content-center" onclick="marcarAssistido(this)" 
+		<button class="btn btn-outline-success mt-3" onclick="marcarAssistido(this)" 
 		data-id="<?php echo $aula_info['id']; ?>">Marcar como assistido</button>
   <?php endif; ?>
+  <button id="load_marcar_concluido" type="button" class="btn btn-info mt-3" disabled><i class="fa fa-refresh fa-spin fa-fw"></i> 
+  Marcando... </button>
   <h5 class="mt-3">Caso tiver dúvida, pode enviar sua pergunta aqui.</h5>
 	<form method="POST" class="form_duvida">
 		<textarea class="form-control" name="duvida"></textarea>

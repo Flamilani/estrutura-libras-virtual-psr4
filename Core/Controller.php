@@ -17,4 +17,13 @@ class Controller {
 		require 'Views/'.$viewName.'.php';
 	}
 
+	// HELPERS
+	
+	public function getLastUrl() {
+		$url = explode("/", $_SERVER["PHP_SELF"]); 
+		$last = end($url); 
+		return $last;
+	}
+
+
 }
