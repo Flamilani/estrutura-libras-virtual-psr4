@@ -80,3 +80,10 @@ ins.play-gif {
 .item-active {
     background-color: #b8daff !important;
 }
+
+.scroll {
+	margin-left: 0;
+    margin-top: 0;
+    overflow-y: auto;
+    height: 700px;
+}
